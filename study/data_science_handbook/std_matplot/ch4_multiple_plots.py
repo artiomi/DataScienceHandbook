@@ -102,3 +102,12 @@ for i, res in enumerate(['l', 'h']):
     m.drawmapboundary(fill_color="#DDEEFF")
     m.drawcoastlines()
     ax[i].set_title("resolution='{0}'".format(res))
+    
+#high resolution map
+fig, ax = plt.subplots(1, 2, figsize=(12, 8))
+for i, res in enumerate(['l', 'h']):
+    m = Basemap(projection='gnom', lat_0=57.3, lon_0=-6.2, width=90000, height=120000, resolution=res, ax=ax[i])
+    m.fillcontinents(color="#FFDDCC", lake_color='#DDEEFF')
+    m.drawmapboundary(fill_color="#DDEEFF")
+    m.drawcoastlines()
+    ax[i].set_title("resolution='{0}'".format(res))
