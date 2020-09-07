@@ -34,6 +34,7 @@ m.shadedrelief()
 m.drawcoastlines(color='red')
 m.drawcountries(color='gray')
 m.drawstates(color='blue')
+
 # 2. scatter city data, with color reflecting population
 # and size reflecting area
 m.scatter(lon, lat, latlon=True,c=np.log10(population), s=area,cmap='Reds', alpha=0.5)
