@@ -67,7 +67,7 @@ min_nights_freq_distr = pd.DataFrame({'frequency':splitted_min_nights_df.value_c
 
 price_labels =[
     '      1  |—|  526.316', 
-    '526.316   —|  1052.632', 
+    ' 526.316  —|  1052.632', 
     ' 1052.632 —| 1578.947', 
     ' 1578.947 —| 2105.263', 
     ' 2105.263 —| 2631.579', 
@@ -91,6 +91,29 @@ min_price_freq_distr = pd.DataFrame({'frequency':splitted_price_df.value_counts(
                                       'percent':(splitted_price_df.value_counts() * 100/splitted_price_df.value_counts().sum()).sort_index()})
 
 
+#Prices frequency histogram
+f, ax = plt.subplots(ncols=2, figsize=(14, 6))
+
+sns.distplot(location_df.price , bins=70, kde=False,  ax=ax[0],
+             hist_kws={"alpha": 0.9, "color": "r","linewidth": 1.5, 'edgecolor':'black'})
+ax[0].set(title='Total prices frequency', ylabel="Frequency",xlabel="Price")
+
+sns.distplot(location_df.loc[location_df.price<500, 'price'] , bins=70, kde=False,  ax=ax[1],
+             hist_kws={"alpha": 0.9, "color": "r","linewidth": 1.5, 'edgecolor':'black'})
+
+ax[1].set(title='(Prices<500) frequency', ylabel="Frequency", xlabel="Price")
+
+#Nights frequency histogram
+f, ax = plt.subplots(ncols=2, figsize=(14, 6))
+
+sns.distplot(location_df.minimum_nights , bins=70, kde=False,  ax=ax[0],
+             hist_kws={"alpha": 0.9, "color": "g","linewidth": 1.5, 'edgecolor':'black'})
+ax[0].set(title='Total minimum nights', ylabel="Frequency",xlabel="Min. nights")
+
+sns.distplot(location_df.loc[location_df.minimum_nights<35, 'minimum_nights'] , bins=70, kde=False,  ax=ax[1],
+             hist_kws={"alpha": 0.9, "color": "g","linewidth": 1.5, 'edgecolor':'black'})
+
+ax[1].set(title='(Min. nights<35) frequency', ylabel="Frequency", xlabel="Min. nights")
 
 
 
