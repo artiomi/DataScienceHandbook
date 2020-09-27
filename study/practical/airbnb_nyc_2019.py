@@ -115,6 +115,22 @@ sns.histplot(location_df.loc[location_df.minimum_nights<35],x='minimum_nights' ,
 
 ax[1].set(title='(Min. nights<35) frequency', ylabel="Frequency", xlabel="Min. nights")
 
+#function for add labels to barplot
+def autolabel(bp):
+    for rect in bp.patches:
+        width = int(rect.get_width())       
+        bp.annotate('{}'.format(width),
+                    xy=(width, rect.get_y() + rect.get_height() / 2),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='center', bbox=(dict(facecolor='green', alpha=0.8)),
+                    color='white', family='monospace')
+#Room type distribution
+sns.set_theme(palette='Set2')
+f, ax = plt.subplots( figsize=(9, 5),subplot_kw=dict(facecolor='#EEE8AA'), facecolor='#EEE8AA')
+bp = sns.barplot(x="frequency",y = room_type_freq_distr.index, data=room_type_freq_distr, ax = ax,
+                 capstyle ='round')
+autolabel(bp)
 
 
 
