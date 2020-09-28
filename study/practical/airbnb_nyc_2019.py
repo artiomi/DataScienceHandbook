@@ -16,7 +16,6 @@ print('neighbourhood_group \n',location_df.neighbourhood_group.value_counts())
 print('room_type \n',location_df.room_type.value_counts())
 print('numeric columns \n',location_df.describe())
 
-print(location_df.neighbourhood.unique())
 
 # Qualitative Variables Frequency Distribution Tables
 neighb_grp_freq_distr = pd.DataFrame({'frequency':location_df.neighbourhood_group.value_counts(),
@@ -131,6 +130,16 @@ f, ax = plt.subplots( figsize=(9, 5),subplot_kw=dict(facecolor='#EEE8AA'), facec
 bp = sns.barplot(x="frequency",y = room_type_freq_distr.index, data=room_type_freq_distr, ax = ax,
                  capstyle ='round')
 autolabel(bp)
+
+#the most frequent neighborhood
+top_10_neighborhood = neighbourhood_freq_distr.sort_values('frequency',ascending=False).head(10).sort_index()
+f, ax = plt.subplots( figsize=(15, 6))
+sns.barplot(x= top_10_neighborhood.index, y = top_10_neighborhood.frequency, data=top_10_neighborhood, ax= ax)
+sns.lineplot(x= top_10_neighborhood.index, y = top_10_neighborhood.frequency, data=top_10_neighborhood,
+             ax= ax, linestyle='--', color='black',alpha = .5, marker="o", markersize=10.,
+             markerfacecolor='green')
+p =plt.setp(ax.get_xticklabels(), rotation=45, ha="right",rotation_mode="anchor", fontsize=13)
+p =plt.setp(ax.get_yticklabels(), rotation=45, ha="right",rotation_mode="anchor", fontsize=13)
 
 
 
