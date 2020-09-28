@@ -3,6 +3,7 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 sns.set()
+sns.set_theme(palette='Set2')
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', 150)
@@ -125,10 +126,10 @@ def autolabel(bp):
                     ha='center', va='center', bbox=(dict(facecolor='green', alpha=0.8)),
                     color='white', family='monospace')
 #Room type distribution
-sns.set_theme(palette='Set2')
 f, ax = plt.subplots( figsize=(9, 5),subplot_kw=dict(facecolor='#EEE8AA'), facecolor='#EEE8AA')
 bp = sns.barplot(x="frequency",y = room_type_freq_distr.index, data=room_type_freq_distr, ax = ax,
                  capstyle ='round')
+ax.set_title("Room type distribution")
 autolabel(bp)
 
 #the most frequent neighborhood
@@ -140,7 +141,15 @@ sns.lineplot(x= top_10_neighborhood.index, y = top_10_neighborhood.frequency, da
              markerfacecolor='green')
 p =plt.setp(ax.get_xticklabels(), rotation=45, ha="right",rotation_mode="anchor", fontsize=13)
 p =plt.setp(ax.get_yticklabels(), rotation=45, ha="right",rotation_mode="anchor", fontsize=13)
+
 ax.legend(ax.patches, [l.get_text() for l in ax.get_xticklabels()],title = 'neghbourhoods',
           loc='upper right',bbox_to_anchor=(1.24,1), fontsize=13)
+ax.set_title('The 10 most frequent neighbourhood')
+
+#neighbourhood group distribution
+f, ax = plt.subplots( figsize=(9, 5),subplot_kw=dict(facecolor='#DCFCE6'), facecolor='#DCFCE6')
+bp = sns.barplot(x="frequency",y = neighb_grp_freq_distr.index, data=neighb_grp_freq_distr, ax = ax)
+ax.set_title("Location Distribution")
+autolabel(bp)
 
 
