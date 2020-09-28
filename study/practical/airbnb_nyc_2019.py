@@ -140,6 +140,7 @@ sns.lineplot(x= top_10_neighborhood.index, y = top_10_neighborhood.frequency, da
              markerfacecolor='green')
 p =plt.setp(ax.get_xticklabels(), rotation=45, ha="right",rotation_mode="anchor", fontsize=13)
 p =plt.setp(ax.get_yticklabels(), rotation=45, ha="right",rotation_mode="anchor", fontsize=13)
-
+ax.legend(ax.patches, [l.get_text() for l in ax.get_xticklabels()],title = 'neghbourhoods',
+          loc='upper right',bbox_to_anchor=(1.24,1), fontsize=13)
 
 
