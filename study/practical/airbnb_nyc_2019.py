@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
+import matplotlib
 sns.set()
 sns.set_theme(palette='Set2')
 
@@ -152,4 +153,31 @@ bp = sns.barplot(x="frequency",y = neighb_grp_freq_distr.index, data=neighb_grp_
 ax.set_title("Location Distribution")
 autolabel(bp)
 
+## Central Trend Measures
+#mean
+location_df[['price', 'minimum_nights']].mean()
 
+#median
+location_df[['price', 'minimum_nights']].median()
+
+#mode
+location_df[['price', 'minimum_nights']].mode()
+
+#median plots
+f, ax = plt.subplots(ncols=2, figsize=(14, 6))
+sns.kdeplot(data=location_df.loc[location_df.price<=750], x='price', fill=True,
+           color = 'red',ax = ax[0], alpha=.2, edgecolor='black')
+sns.kdeplot(data=location_df.loc[location_df.minimum_nights<=32], x='minimum_nights',
+            color = 'blue', fill=True, ax = ax[1], alpha=.2, edgecolor='black')
+
+ax[0].xaxis.set_major_locator(plt.IndexLocator(offset=ax[0].xaxis.get_data_interval()[0] * -1, base=200))
+ax[0].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.002))
+ax[0].set_title('Price <= 750 | Density')
+ax[0].set_xlim(0,750)
+
+ax[1].xaxis.set_major_locator(plt.IndexLocator(offset=ax[1].xaxis.get_data_interval()[0] * -1, base=10))
+ax[1].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.05))
+ax[1].set_title('Minimum nights <= 32 | Density')
+ax[1].set_xlim(0,32)
+
+#plt.axvline(0, color="k", linestyle="--");
