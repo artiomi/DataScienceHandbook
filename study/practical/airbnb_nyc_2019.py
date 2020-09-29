@@ -162,6 +162,13 @@ location_df[['price', 'minimum_nights']].median()
 
 #mode
 location_df[['price', 'minimum_nights']].mode()
+def format_func(value, tick_number):
+    if tick_number%2==0:
+        result = int(value) if value<=0 or value>=1 else round(value, 3)
+        return result
+    else:
+        return ''
+    
 
 #median plots
 f, ax = plt.subplots(ncols=2, figsize=(14, 6))
@@ -170,14 +177,21 @@ sns.kdeplot(data=location_df.loc[location_df.price<=750], x='price', fill=True,
 sns.kdeplot(data=location_df.loc[location_df.minimum_nights<=32], x='minimum_nights',
             color = 'blue', fill=True, ax = ax[1], alpha=.2, edgecolor='black')
 
-ax[0].xaxis.set_major_locator(plt.IndexLocator(offset=ax[0].xaxis.get_data_interval()[0] * -1, base=200))
-ax[0].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.002))
+#ax[0].axvline().set_ydata(0)
+
+#ax[0].xaxis.set_major_locator(plt.IndexLocator(offset=ax[0].xaxis.get_data_interval()[0] * -1, base=200))
+#ax[0].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.002))
+
+ax[0].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
+ax[0].yaxis.set_major_formatter(plt.FuncFormatter(format_func))
+
 ax[0].set_title('Price <= 750 | Density')
 ax[0].set_xlim(0,750)
 
-ax[1].xaxis.set_major_locator(plt.IndexLocator(offset=ax[1].xaxis.get_data_interval()[0] * -1, base=10))
-ax[1].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.05))
+#ax[1].xaxis.set_major_locator(plt.IndexLocator(offset=ax[1].xaxis.get_data_interval()[0] * -1, base=10))
+#ax[1].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.05))
+ax[1].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
+ax[1].yaxis.set_major_formatter(plt.FuncFormatter(format_func))
 ax[1].set_title('Minimum nights <= 32 | Density')
 ax[1].set_xlim(0,32)
-
 #plt.axvline(0, color="k", linestyle="--");
