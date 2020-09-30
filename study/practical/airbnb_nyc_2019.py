@@ -213,3 +213,20 @@ ax[0].set_xlim(0,750)
 
 ax[1].set_title('Minimum nights <= 32 | Density')
 ax[1].set_xlim(0,32)
+
+#Separating Measures
+#quartile
+quarantile = location_df[['price', 'minimum_nights']].quantile(q=(.25, .5, .75))
+print("quarantile:", quarantile)
+
+#decile
+decile = np.linspace(start = 0.1, stop =0.9, num=9)
+decile_df = location_df[['price', 'minimum_nights']].quantile(q=decile)
+decile_df.index = ['{:2.0f}%'.format(i*100) for i in decile]
+print("decile:\n",decile_df)
+
+#percentile
+percentile = np.linspace(start = .01, stop =.99, num=99)
+percentile_df = location_df[['price', 'minimum_nights']].quantile(q=percentile)
+percentile_df.index = ['{:1.0f}%'.format(i*100) for i in percentile]
+print("percentile:\n",percentile_df)
