@@ -172,12 +172,30 @@ def format_func(value, tick_number):
 
 #median plots
 f, ax = plt.subplots(ncols=2, figsize=(14, 6))
+
 sns.kdeplot(data=location_df.loc[location_df.price<=750], x='price', fill=True,
            color = 'red',ax = ax[0], alpha=.2, edgecolor='black')
 sns.kdeplot(data=location_df.loc[location_df.minimum_nights<=32], x='minimum_nights',
             color = 'blue', fill=True, ax = ax[1], alpha=.2, edgecolor='black')
 
-#ax[0].axvline().set_ydata(0)
+#mark mean, median and mode
+ax[0].axvline(x = location_df.price.mean(), color='black', linestyle= '-.', linewidth=1.5)
+ax[0].axvline(x = location_df.price.median(), color='red', linestyle= '--', linewidth=1.5)
+ax[0].axvline(x = location_df.price.mode()[0], color='green', linestyle= ':', linewidth=2.5)
+
+ax[1].axvline(x = location_df.minimum_nights.mean(), color='black', linestyle= '-.', linewidth=1.5)
+ax[1].axvline(x = location_df.minimum_nights.median(), color='red', linestyle= '--', linewidth=1.5)
+ax[1].axvline(x = location_df.minimum_nights.mode()[0], color='green', linestyle= ':', linewidth=2.5)
+
+#add texts for mean, median and mode
+ax[0].text(s="Mean = 152.72", x = 270, y = .0065, color='black', fontsize =13, fontweight='semibold')
+ax[0].text(s="Median = 106", x = 270, y = .0055, color='red', fontsize =13, fontweight='semibold')
+ax[0].text(s="Mode = 100", x = 270, y = .0045, color='green', fontsize =13, fontweight='semibold')
+
+ax[1].text(s="Mean = 7.02", x = 12, y = .185, color='black', fontsize =13, fontweight='semibold')
+ax[1].text(s="Median = 3", x = 12, y = .165, color='red', fontsize =13, fontweight='semibold')
+ax[1].text(s="Mode = 1", x = 12, y = .135, color='green', fontsize =13, fontweight='semibold')
+
 
 #ax[0].xaxis.set_major_locator(plt.IndexLocator(offset=ax[0].xaxis.get_data_interval()[0] * -1, base=200))
 #ax[0].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.002))
@@ -185,13 +203,13 @@ sns.kdeplot(data=location_df.loc[location_df.minimum_nights<=32], x='minimum_nig
 ax[0].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
 ax[0].yaxis.set_major_formatter(plt.FuncFormatter(format_func))
 
-ax[0].set_title('Price <= 750 | Density')
-ax[0].set_xlim(0,750)
-
 #ax[1].xaxis.set_major_locator(plt.IndexLocator(offset=ax[1].xaxis.get_data_interval()[0] * -1, base=10))
 #ax[1].yaxis.set_major_locator(plt.IndexLocator(offset=0, base=0.05))
 ax[1].xaxis.set_major_formatter(plt.FuncFormatter(format_func))
 ax[1].yaxis.set_major_formatter(plt.FuncFormatter(format_func))
+
+ax[0].set_title('Price <= 750 | Density')
+ax[0].set_xlim(0,750)
+
 ax[1].set_title('Minimum nights <= 32 | Density')
 ax[1].set_xlim(0,32)
-#plt.axvline(0, color="k", linestyle="--");
