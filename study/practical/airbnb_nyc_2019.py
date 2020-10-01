@@ -230,3 +230,41 @@ percentile = np.linspace(start = .01, stop =.99, num=99)
 percentile_df = location_df[['price', 'minimum_nights']].quantile(q=percentile)
 percentile_df.index = ['{:1.0f}%'.format(i*100) for i in percentile]
 print("percentile:\n",percentile_df)
+
+#violin plot for minimum nights and price
+
+f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(ncols=2,nrows=2, figsize=(14, 12))
+
+sns.violinplot(y = 'price', data=location_df, ax=ax1, color='cyan')
+sns.violinplot(y = 'minimum_nights',  data=location_df, ax=ax2, color='yellow')
+sns.violinplot(y = 'price', data=location_df.loc[location_df.price<=750], ax=ax3, color='cyan')
+sns.violinplot(y = 'minimum_nights',  data=location_df.loc[location_df.minimum_nights<=32], ax=ax4, color = 'yellow')
+
+ax1.set(title="Price | Violin", ylabel="")
+ax2.set(title="Minimum Nights | Violin", ylabel="")
+ax3.set(title="Price <= 750 | Violin", ylabel="")
+ax4.set(title="Minimum Nights <= 32 | Violin", ylabel="")
+
+ax1.axhline(y = location_df.price.median(), color='black', linestyle= '--', linewidth=2.5)
+ax2.axhline(y = location_df.minimum_nights.median(), color='black', linestyle= '--', linewidth=2.5)
+ax3.axhline(y = location_df.price.median(), color='black', linestyle= '--', linewidth=2.5)
+ax4.axhline(y = location_df.minimum_nights.median(), color='black', linestyle= '--', linewidth=2.5)
+
+#cumulative plot
+#location_df['price_cum_sum'] = location_df.price.cumsum()/location_df.price.sum()
+f, ax = plt.subplots(ncols=2, figsize=(14, 6))
+#,y = location_df.price.cumsum()/location_df.price.sum()
+sns.histplot(location_df, x='price', y='price_cum_sum' , bins=70, kde=False, cumulative=True, fill=False,  ax=ax[0],
+             alpha=0.9, color="r",linewidth= 1.5, edgecolor='black')
+
+sns.histplot(location_df, x='minimum_nights'  , bins=70, kde=False,cumulative=True, fill=True,  ax=ax[1],
+             alpha= 0.9, color= "r",linewidth= 1.5, edgecolor='black')
+
+# =============================================================================
+# sns.ecdfplot(location_df, x='price',y = location_df.price.cumsum()/location_df.price.sum(), ax=ax[0])
+# sns.ecdfplot(location_df, x='minimum_nights',y = location_df.minimum_nights.cumsum()/location_df.minimum_nights.sum(), ax=ax[1])
+# 
+# =============================================================================
+ax[0].set(title='Total prices frequency', ylabel="Frequency",xlabel="Price")
+
+ax[1].set(title='(Prices<500) frequency', ylabel="Frequency", xlabel="Price")
