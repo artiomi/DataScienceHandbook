@@ -250,21 +250,18 @@ ax2.axhline(y = location_df.minimum_nights.median(), color='black', linestyle= '
 ax3.axhline(y = location_df.price.median(), color='black', linestyle= '--', linewidth=2.5)
 ax4.axhline(y = location_df.minimum_nights.median(), color='black', linestyle= '--', linewidth=2.5)
 
-#cumulative plot
-#location_df['price_cum_sum'] = location_df.price.cumsum()/location_df.price.sum()
+#price and minimum nights cumulative plots
+
 f, ax = plt.subplots(ncols=2, figsize=(14, 6))
-#,y = location_df.price.cumsum()/location_df.price.sum()
-sns.histplot(location_df, x='price', y='price_cum_sum' , bins=70, kde=False, cumulative=True, fill=False,  ax=ax[0],
-             alpha=0.9, color="r",linewidth= 1.5, edgecolor='black')
 
-sns.histplot(location_df, x='minimum_nights'  , bins=70, kde=False,cumulative=True, fill=True,  ax=ax[1],
-             alpha= 0.9, color= "r",linewidth= 1.5, edgecolor='black')
+sns.histplot(location_df, x='price' , bins=70, kde=False, cumulative=True, fill=True,
+             stat="density", ax=ax[0],
+             alpha=0.9, color="cyan", linewidth= 1.5, edgecolor='black')
 
-# =============================================================================
-# sns.ecdfplot(location_df, x='price',y = location_df.price.cumsum()/location_df.price.sum(), ax=ax[0])
-# sns.ecdfplot(location_df, x='minimum_nights',y = location_df.minimum_nights.cumsum()/location_df.minimum_nights.sum(), ax=ax[1])
-# 
-# =============================================================================
-ax[0].set(title='Total prices frequency', ylabel="Frequency",xlabel="Price")
+sns.histplot(location_df, x='minimum_nights', bins=70, kde=False, cumulative=True, fill=True,  
+              stat="density", ax=ax[1],
+             alpha= 0.9, color= "yellow",linewidth= 1.5, edgecolor='black')
 
-ax[1].set(title='(Prices<500) frequency', ylabel="Frequency", xlabel="Price")
+ax[0].set(title='Price Cumulative', ylabel="Percent (%)",xlabel="Price")
+
+ax[1].set(title='Minimum Nights Cumulative', ylabel="", xlabel="Minimum Nights")
