@@ -265,3 +265,92 @@ sns.histplot(location_df, x='minimum_nights', bins=70, kde=False, cumulative=Tru
 ax[0].set(title='Price Cumulative', ylabel="Percent (%)",xlabel="Price")
 
 ax[1].set(title='Minimum Nights Cumulative', ylabel="", xlabel="Minimum Nights")
+
+#Dispersion measure
+
+#minimum absolute deviation
+mad = location_df[['price', 'minimum_nights']].mad()
+print('minimum absolute deviation: ', mad)
+
+#variance
+var = location_df[['price', 'minimum_nights']].var()
+print("variance: ", var)
+
+#standart deviation
+std = location_df[['price', 'minimum_nights']].std()
+print('standart deviation: ', std)
+
+mean_room_type = location_df.pivot_table(values='price',index='room_type')
+
+mean_room_type.rename(columns={'price':'average_price'}, inplace=True)
+mean_room_type['percent']  = mean_room_type.average_price * 100/mean_room_type.average_price.sum()
+
+#Price behavior in relation to room types
+
+f, ax = plt.subplots(ncols=2, figsize=(14, 6))
+sns.histplot(location_df, x='price', hue = 'room_type', bins=70, kde=False, 
+             ax=ax[0], legend=False,
+             alpha=0.9, color="r",linewidth= 1.5, edgecolor='black')
+
+sns.histplot(location_df[location_df.price<=1000], x='price', hue = 'room_type', bins=70, kde=False, 
+             ax=ax[1], legend=True,
+             alpha=0.9, color="r",linewidth= 1.5, edgecolor='black')
+
+ax[0].set(xlabel='Price', ylabel='Frequency', title='Price Histogram')
+ax[1].set(xlabel='Price', ylabel='', title='Price <= 1000 | Histogram')
+
+f, ax = plt.subplots( figsize=(14, 6))
+
+sns.kdeplot( data=location_df[location_df.price<=1000], ax = ax,
+    x="price", hue=location_df.room_type,  multiple="layer", common_norm=False,
+    fill=True, bw_adjust=0.45, 
+    alpha =.3, linewidth= 1, edgecolor='black' )
+
+ax.set(xlabel='Price', title='Price <= 1000 | Histogram')
+
+#The 10 most expensive neighborhoods to book on airbnb
+top_10_exp_neighbourhood = location_df.pivot_table(values='price',index='neighbourhood')
+top_10_exp_neighbourhood.sort_values(by='price', ascending=False, inplace=True)
+top_10_exp_neighbourhood = top_10_exp_neighbourhood[2:12]
+top_10_exp_neighbourhood.reset_index(inplace=True)
+
+#Price behaviour in relation to neighbourhoods
+neiborhoods = ["Tribeca", "Sea Gate", "Riverdale", "Prince's Bay", "Battery Park City", "Flatiron District",
+               "Randall Manor", "NoHo", "SoHo", "Midtown"]
+
+neigh_prc = location_df.loc[location_df.neighbourhood.isin(neiborhoods),['neighbourhood','price']]
+sns.set_theme(style="white", rc={"axes.facecolor": (0, 0, 0, 0)})
+g = sns.FacetGrid(neigh_prc, row="neighbourhood",hue="neighbourhood", aspect=15, height=.95,
+                  sharex=True, xlim=(-500,4000))
+
+g.map(sns.kdeplot, "price", common_norm=False,  bw_adjust=.25, clip_on=False, fill=True, alpha=.7,
+      linewidth=1.5)
+
+g.map(plt.axhline, y=0, lw=2, clip_on=False)
+
+
+def label(neighbourhood, color, label):
+    ax = plt.gca()
+    ax.text(0, .2, label, fontweight="normal", color='black',
+             ha="right", va="center", transform=ax.transAxes)
+ 
+ 
+g.map(label, 'price')
+
+# Set the subplots to overlap
+g.fig.subplots_adjust(left=.2, right=.8, bottom = .1, top=.8, hspace=-.65)
+
+# Remove axes details that don't play well with overlap
+g.set_titles("")
+g.set(yticks=[])
+g.despine(left=True)
+
+
+
+
+
+
+
+
+
+
