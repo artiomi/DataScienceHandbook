@@ -345,6 +345,18 @@ g.set_titles("")
 g.set(yticks=[])
 g.despine(left=True)
 
+#price histogram for 10 most popular neighbourhoods
+def modify_axes_locator(*args, **kwargs):
+    ax = plt.gca()
+    ax.xaxis.set_major_locator(plt.MultipleLocator(1000))
+    
+sns.set_theme()
+face_grid = sns.FacetGrid(neigh_prc, col="neighbourhood",col_wrap=3, aspect=1.5, height=3,
+                          sharex=True, sharey=True, xlim=(0,4000))
+face_grid.map(sns.histplot, "price", bins=70,  kde=False,  alpha=.7, linewidth=1.5, edgecolor='black')
+face_grid.map(modify_axes_locator)
+face_grid.set_titles("{col_name}",fontweight="bold")
+face_grid.set_xlabels('')
 
 
 
