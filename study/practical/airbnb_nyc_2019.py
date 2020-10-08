@@ -117,11 +117,28 @@ sns.histplot(location_df.loc[location_df.minimum_nights<35],x='minimum_nights' ,
 ax[1].set(title='(Min. nights<35) frequency', ylabel="Frequency", xlabel="Min. nights")
 
 #function for add labels to barplot
-def autolabel(bp):
+def __text_xy_map(bp, orient):
+    results = []
     for rect in bp.patches:
-        width = int(rect.get_width())       
-        bp.annotate('{}'.format(width),
-                    xy=(width, rect.get_y() + rect.get_height() / 2),
+        if orient == 'h':
+            text = int(rect.get_width())
+            xy = (text, rect.get_y() + rect.get_height() / 2)
+        elif orient == 'v':
+            text = int(rect.get_height())
+            xy = ( rect.get_x() + rect.get_width() / 2, text)
+        else:
+            raise NotImplementedError('no implimentatiton for orient:[{}]'.format(orient))
+            
+        results.append((text, xy))
+    return results
+
+#orient v or h, orientation of barplot
+def autolabel(bp, orient='h'):
+    text_xy = __text_xy_map(bp,orient)
+    
+    for text, xy in text_xy:
+        bp.annotate('{}'.format(text),
+                    xy=xy,
                     xytext=(0, 3),  # 3 points vertical offset
                     textcoords="offset points",
                     ha='center', va='center', bbox=(dict(facecolor='green', alpha=0.8)),
@@ -309,10 +326,10 @@ sns.kdeplot( data=location_df[location_df.price<=1000], ax = ax,
 ax.set(xlabel='Price', title='Price <= 1000 | Histogram')
 
 #The 10 most expensive neighborhoods to book on airbnb
-top_10_exp_neighbourhood = location_df.pivot_table(values='price',index='neighbourhood')
-top_10_exp_neighbourhood.sort_values(by='price', ascending=False, inplace=True)
-top_10_exp_neighbourhood = top_10_exp_neighbourhood[2:12]
-top_10_exp_neighbourhood.reset_index(inplace=True)
+price_neighbourhood_group = location_df.pivot_table(values='price',index='neighbourhood')
+price_neighbourhood_group.sort_values(by='price', ascending=False, inplace=True)
+price_neighbourhood_group.reset_index(inplace=True)
+top_10_exp_neighbourhood = price_neighbourhood_group[2:12]
 
 #Price behaviour in relation to neighbourhoods
 neiborhoods = ["Tribeca", "Sea Gate", "Riverdale", "Prince's Bay", "Battery Park City", "Flatiron District",
@@ -358,6 +375,24 @@ face_grid.map(modify_axes_locator)
 face_grid.set_titles("{col_name}",fontweight="bold")
 face_grid.set_xlabels('')
 
+#The 10 cheapest neighborhoods to book on airbnb
+sns.set_theme(palette='Set2')
+
+top_10_cheap_neighbourhood = price_neighbourhood_group.tail(10)
+print('The 10 cheapest neighborhoods to book on airbnb:\n', top_10_cheap_neighbourhood)
+
+_, ax = plt.subplots( figsize=(15, 6))
+sns.barplot(x= 'neighbourhood', y ='price', data=top_10_cheap_neighbourhood, ax= ax)
+
+p =plt.setp(ax.get_xticklabels(), rotation=30, ha="right",rotation_mode="anchor", fontsize=13)
+p =plt.setp(ax.get_yticklabels(), rotation=45, ha="right",rotation_mode="anchor", fontsize=13)
+
+ax.yaxis.set_major_locator(plt.MultipleLocator(20))
+ax.set(title='The 10 cheapest neighborhoods to book on airbnb', xlabel='', ylabel='')
+autolabel(ax, orient='v')
+
+
+#Geographic analysis
 
 
 
